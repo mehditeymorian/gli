@@ -8,22 +8,24 @@ func Default() Config {
 			"1.16",
 			"1.15",
 		},
-		DB: []string{
-			"none",
-			"mysql",
-			"postgres",
-			"mongodb",
-		},
-		HTTP: []string{
-			"none",
-			"gofiber",
-			"echo",
-			"gin",
-		},
-		Log: []string{
-			"none",
-			"zap",
-			"logrus",
+		Modules: map[string][]string{
+			"db": {
+				"none",
+				"mysql",
+				"postgres",
+				"mongodb",
+			},
+			"http": {
+				"none",
+				"gofiber",
+				"echo",
+				"gin",
+			},
+			"log": {
+				"none",
+				"zap",
+				"logrus",
+			},
 		},
 	}
 }
