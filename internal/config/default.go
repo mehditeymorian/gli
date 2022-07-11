@@ -21,7 +21,7 @@ func Default() Config {
 				"echo",
 				"gin",
 			},
-			"log": {
+			"logger": {
 				"none",
 				"zap",
 				"logrus",
