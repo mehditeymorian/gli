@@ -8,23 +8,56 @@ func Default() Config {
 			"1.16",
 			"1.15",
 		},
-		Modules: map[string][]string{
+		Modules: map[string][]Module{
 			"db": {
-				"none",
-				"mysql",
-				"postgres",
-				"mongodb",
+				{
+					Name:  "none",
+					Files: nil,
+				},
+				{
+					Name:  "mysql",
+					Files: []string{},
+				},
+				{
+					Name:  "postgres",
+					Files: []string{},
+				},
+				{
+					Name:  "mongodb",
+					Files: []string{},
+				},
 			},
 			"http": {
-				"none",
-				"gofiber",
-				"echo",
-				"gin",
+				{
+					Name:  "none",
+					Files: []string{},
+				},
+				{
+					Name:  "gofiber",
+					Files: []string{},
+				},
+				{
+					Name:  "echo",
+					Files: []string{},
+				},
+				{
+					Name:  "gin",
+					Files: []string{},
+				},
 			},
 			"logger": {
-				"none",
-				"zap",
-				"logrus",
+				{
+					Name:  "none",
+					Files: []string{},
+				},
+				{
+					Name:  "zap",
+					Files: []string{},
+				},
+				{
+					Name:  "logrus",
+					Files: []string{},
+				},
 			},
 		},
 	}

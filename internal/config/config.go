@@ -2,7 +2,7 @@ package config
 
 type Config struct {
 	Versions []string
-	Modules  map[string][]string
+	Modules  map[string][]Module
 }
 
 func (c Config) ModuleNames() []string {
@@ -12,6 +12,16 @@ func (c Config) ModuleNames() []string {
 	}
 
 	return modules
+}
+
+func (c Config) ModuleOptions(name string) []string {
+	names := make([]string, 0)
+
+	for _, module := range c.Modules[name] {
+		names = append(names, module.Name)
+	}
+
+	return names
 }
 
 func Load() Config {
