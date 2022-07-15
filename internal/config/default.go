@@ -1,5 +1,7 @@
 package config
 
+import "github.com/mehditeymorian/gli/internal/model"
+
 func Default() Config {
 	return Config{
 		Versions: []string{
@@ -8,7 +10,7 @@ func Default() Config {
 			"1.16",
 			"1.15",
 		},
-		Modules: map[string][]Module{
+		Modules: map[string][]model.Module{
 			"db": {
 				{
 					Name:  "none",

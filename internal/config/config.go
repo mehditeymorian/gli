@@ -1,8 +1,10 @@
 package config
 
+import "github.com/mehditeymorian/gli/internal/model"
+
 type Config struct {
 	Versions []string
-	Modules  map[string][]Module
+	Modules  map[string][]model.Module
 }
 
 func (c Config) ModuleNames() []string {
