@@ -1,5 +1,7 @@
 package model
 
+import "github.com/mehditeymorian/gli/internal/config"
+
 type App struct {
 	Modules []string
 
@@ -12,5 +14,10 @@ type App struct {
 }
 
 func EmptyApp() *App {
-	return &App{}
+	return &App{
+		Logger:     config.None,
+		DB:         config.None,
+		HTTP:       config.None,
+		Dockerfile: false,
+	}
 }

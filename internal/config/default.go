@@ -2,6 +2,13 @@ package config
 
 import "github.com/mehditeymorian/gli/internal/model"
 
+const (
+	None   = "none"
+	DB     = "db"
+	HTTP   = "http"
+	Logger = "logger"
+)
+
 func Default() Config {
 	return Config{
 		Versions: []string{
@@ -11,9 +18,9 @@ func Default() Config {
 			"1.15",
 		},
 		Modules: map[string][]model.Module{
-			"db": {
+			DB: {
 				{
-					Name:  "none",
+					Name:  None,
 					Files: nil,
 				},
 				{
@@ -29,9 +36,9 @@ func Default() Config {
 					Files: []string{},
 				},
 			},
-			"http": {
+			HTTP: {
 				{
-					Name:  "none",
+					Name:  None,
 					Files: []string{},
 				},
 				{
@@ -47,9 +54,9 @@ func Default() Config {
 					Files: []string{},
 				},
 			},
-			"logger": {
+			Logger: {
 				{
-					Name:  "none",
+					Name:  None,
 					Files: []string{},
 				},
 				{
