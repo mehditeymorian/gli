@@ -1,6 +1,7 @@
 package config
 
 type Module struct {
-	Name  string
-	Files []string
+	Name    string
+	Package string
+	Files   []string
 }
