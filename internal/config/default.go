@@ -51,8 +51,11 @@ func Default() Config {
 					Files: []string{},
 				},
 				{
-					Name:  "zap",
-					Files: []string{},
+					Name: "zap",
+					Files: []string{
+						"config.go",
+						"log.go",
+					},
 				},
 				{
 					Name:  "logrus",
