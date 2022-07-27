@@ -1,12 +1,7 @@
 package config
 
-import "github.com/mehditeymorian/gli/internal/model"
-
-const (
-	None   = "none"
-	DB     = "db"
-	HTTP   = "http"
-	Logger = "logger"
+import (
+	"github.com/mehditeymorian/gli/internal/model"
 )
 
 func Default() Config {
@@ -18,9 +13,9 @@ func Default() Config {
 			"1.15",
 		},
 		Modules: map[string][]model.Module{
-			DB: {
+			model.DB: {
 				{
-					Name:  None,
+					Name:  model.None,
 					Files: nil,
 				},
 				{
@@ -36,9 +31,9 @@ func Default() Config {
 					Files: []string{},
 				},
 			},
-			HTTP: {
+			model.HTTP: {
 				{
-					Name:  None,
+					Name:  model.None,
 					Files: []string{},
 				},
 				{
@@ -54,9 +49,9 @@ func Default() Config {
 					Files: []string{},
 				},
 			},
-			Logger: {
+			model.Logger: {
 				{
-					Name:  None,
+					Name:  model.None,
 					Files: []string{},
 				},
 				{
