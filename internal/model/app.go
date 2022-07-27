@@ -1,11 +1,14 @@
 package model
 
-import "github.com/mehditeymorian/gli/internal/config"
+import (
+	"strings"
+)
 
 type App struct {
 	Modules []string
 
 	Name       string
+	ShortName  string
 	Version    string
 	Logger     string
 	DB         string
@@ -15,9 +18,19 @@ type App struct {
 
 func EmptyApp() *App {
 	return &App{
-		Logger:     config.None,
-		DB:         config.None,
-		HTTP:       config.None,
+		Logger:     None,
+		DB:         None,
+		HTTP:       None,
 		Dockerfile: false,
+	}
+}
+
+// Execute extract some fields from existing fields
+func (a *App) Execute() {
+	if strings.Contains(a.Name, "/") {
+		split := strings.Split(a.Name, "/")
+		a.ShortName = split[len(split)-1]
+	} else {
+		a.ShortName = a.Name
 	}
 }
