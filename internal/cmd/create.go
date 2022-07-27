@@ -1,11 +1,11 @@
 package cmd
 
 import (
+	"github.com/mehditeymorian/gli/internal/builder"
 	"github.com/mehditeymorian/gli/internal/config"
 	"github.com/mehditeymorian/gli/internal/model"
 	"github.com/mehditeymorian/gli/internal/question"
 	"github.com/spf13/cobra"
-	"log"
 )
 
 func Create() *cobra.Command {
@@ -26,5 +26,7 @@ func run(_ *cobra.Command, _ []string) {
 
 	question.New(cfg).Fill(app)
 
-	log.Println(app)
+	app.Execute()
+
+	builder.NewBuilder(cfg).Build(app)
 }
