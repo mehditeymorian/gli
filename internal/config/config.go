@@ -1,6 +1,8 @@
 package config
 
-import "github.com/mehditeymorian/gli/internal/model"
+import (
+	"github.com/mehditeymorian/gli/internal/model"
+)
 
 type Config struct {
 	Versions []string
@@ -24,6 +26,16 @@ func (c Config) ModuleOptions(name string) []string {
 	}
 
 	return names
+}
+
+func (c Config) ModuleTechnologyFiles(module, technology string) []string {
+	for _, m := range c.Modules[module] {
+		if m.Name == technology {
+			return m.Files
+		}
+	}
+
+	return nil
 }
 
 func Load() Config {
