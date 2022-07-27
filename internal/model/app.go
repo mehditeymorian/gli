@@ -25,6 +25,17 @@ func EmptyApp() *App {
 	}
 }
 
+func (a *App) Params() map[string]any {
+	return map[string]any{
+		"Name":      a.Name,
+		"ShortName": a.ShortName,
+		"Version":   a.Version,
+		"HasLogger": a.Logger != None,
+		"HasDB":     a.DB != None,
+		"HasHTTP":   a.HTTP != None,
+	}
+}
+
 // Execute extract some fields from existing fields
 func (a *App) Execute() {
 	if strings.Contains(a.Name, "/") {

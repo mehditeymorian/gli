@@ -112,11 +112,7 @@ func (b Builder) DownloadSingle(fileName string, required bool, directory string
 
 		temp := template.Must(template.New(fileName).Parse(buf.String()))
 
-		params := map[string]string{
-			"Name":      app.Name,
-			"ShortName": app.ShortName,
-			"Version":   app.Version,
-		}
+		params := app.Params()
 
 		result := new(strings.Builder)
 
