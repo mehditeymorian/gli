@@ -21,8 +21,9 @@ const (
 )
 
 type Builder struct {
-	Client *github.Client
-	Config config.Config
+	Client          *github.Client
+	Config          config.Config
+	ParentDirectory string
 }
 
 func NewBuilder(cfg config.Config) *Builder {
@@ -38,6 +39,8 @@ func NewBuilder(cfg config.Config) *Builder {
 }
 
 func (b *Builder) Build(app *model.App) {
+	b.ParentDirectory = app.ShortName
+
 	b.DownloadModule(model.HTTP, app.HTTP)
 	b.DownloadModule(model.DB, app.DB)
 	b.DownloadModule(model.Logger, app.Logger)
@@ -51,7 +54,7 @@ func (b *Builder) DownloadModule(module, technology string) {
 	if technology != "none" && files != nil {
 		log.Printf("Downloading %s/%s\n", module, technology)
 
-		dir := filepath.Join("internal", module)
+		dir := filepath.Join(b.ParentDirectory, "internal", module)
 
 		for _, file := range files {
 			log.Printf("Downloading %s\n", file)
@@ -92,9 +95,9 @@ func (b *Builder) DownloadSingle(fileName string, required bool, directory strin
 
 	var filePath string
 	if directory != "" {
-		filePath = directory + "/" + fileName
+		filePath = filepath.Join(b.ParentDirectory, directory, fileName)
 	} else {
-		filePath = fileName
+		filePath = filepath.Join(b.ParentDirectory, fileName)
 	}
 
 	reader, _, err := b.Client.Repositories.DownloadContents(context.Background(), user, repo, path, nil)
