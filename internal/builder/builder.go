@@ -56,9 +56,6 @@ func (b *Builder) DownloadModule(module, technology string) {
 		log.Printf("Downloading %s/%s\n", module, technology)
 
 		dir := filepath.Join("internal", module)
-		err := os.MkdirAll(dir, os.ModePerm)
-
-		handleErr("failed to create module directory", err)
 
 		for _, file := range files {
 			log.Printf("Downloading %s\n", file)
@@ -66,6 +63,11 @@ func (b *Builder) DownloadModule(module, technology string) {
 			path := "template/" + module + "/" + technology + "/" + file
 			reader, _, err := b.Client.Repositories.DownloadContents(context.Background(), user, repo, path, nil)
 			handleErr("failed to download content from templates", err)
+
+			if _, err := os.Stat(dir); os.IsNotExist(err) {
+				err := os.MkdirAll(dir, os.ModePerm)
+				handleErr("failed to create module directory", err)
+			}
 
 			file, err := os.Create(dir + "/" + file)
 			handleErr("failed to create file", err)
