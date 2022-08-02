@@ -23,7 +23,6 @@ const (
 type Builder struct {
 	Client *github.Client
 	Config config.Config
-	Root   string
 }
 
 func NewBuilder(cfg config.Config) *Builder {
@@ -32,11 +31,8 @@ func NewBuilder(cfg config.Config) *Builder {
 	tc := oauth2.NewClient(ctx, ts)
 	client := github.NewClient(tc)
 
-	root, _ := os.Getwd()
-
 	return &Builder{
 		Client: client,
-		Root:   root,
 		Config: cfg,
 	}
 }
