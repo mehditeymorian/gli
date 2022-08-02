@@ -78,7 +78,7 @@ func (b *Builder) DownloadModule(module, technology string) {
 	}
 }
 
-func (b Builder) DownloadSingle(fileName string, required bool, directory string, requireParsing bool, app *model.App) {
+func (b *Builder) DownloadSingle(fileName string, required bool, directory string, requireParsing bool, app *model.App) {
 	if !required {
 		return
 	}
