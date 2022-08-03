@@ -60,6 +60,7 @@ func Default() Config {
 						"config.go",
 						"log.go",
 					},
+					Package: "go.uber.org/zap@latest",
 				},
 				{
 					Name:  "logrus",
