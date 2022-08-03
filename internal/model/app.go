@@ -36,6 +36,24 @@ func (a *App) Params() map[string]any {
 	}
 }
 
+func (a *App) RequiredModules(modules map[string][]Module) []string {
+	mods := make([]string, 0)
+
+	if mod := searchPackage(Logger, a.Logger, modules); mod != "" {
+		mods = append(mods, mod)
+	}
+
+	if mod := searchPackage(DB, a.DB, modules); mod != "" {
+		mods = append(mods, mod)
+	}
+
+	if mod := searchPackage(HTTP, a.HTTP, modules); mod != "" {
+		mods = append(mods, mod)
+	}
+
+	return mods
+}
+
 // Execute extract some fields from existing fields
 func (a *App) Execute() {
 	if strings.Contains(a.Name, "/") {
@@ -44,4 +62,16 @@ func (a *App) Execute() {
 	} else {
 		a.ShortName = a.Name
 	}
+}
+
+func searchPackage(moduleType, wantedModule string, modules map[string][]Module) string {
+	if wantedModule != None {
+		for _, module := range modules[moduleType] {
+			if module.Name == wantedModule {
+				return module.Package
+			}
+		}
+	}
+
+	return ""
 }
