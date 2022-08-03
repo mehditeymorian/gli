@@ -3,6 +3,7 @@ package cmd
 import (
 	"github.com/mehditeymorian/gli/internal/builder"
 	"github.com/mehditeymorian/gli/internal/config"
+	"github.com/mehditeymorian/gli/internal/mod"
 	"github.com/mehditeymorian/gli/internal/model"
 	"github.com/mehditeymorian/gli/internal/question"
 	"github.com/spf13/cobra"
@@ -29,4 +30,6 @@ func run(_ *cobra.Command, _ []string) {
 	app.Execute()
 
 	builder.NewBuilder(cfg).Build(app)
+
+	mod.DownloadModules(cfg, app)
 }
