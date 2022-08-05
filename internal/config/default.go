@@ -27,8 +27,13 @@ func Default() Config {
 					Files: []string{},
 				},
 				{
-					Name:  "mongodb",
-					Files: []string{},
+					Name: "mongo",
+					Files: []string{
+						"config.go",
+						"mongo.go",
+						"mongo_test.go",
+					},
+					Package: "go.mongodb.org/mongo-driver/mongo",
 				},
 			},
 			model.HTTP: {
@@ -61,10 +66,6 @@ func Default() Config {
 						"log.go",
 					},
 					Package: "go.uber.org/zap@latest",
-				},
-				{
-					Name:  "logrus",
-					Files: []string{},
 				},
 			},
 		},
