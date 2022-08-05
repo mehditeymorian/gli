@@ -16,8 +16,9 @@ import (
 )
 
 const (
-	user = "mehditeymorian"
-	repo = "gli"
+	user  = "mehditeymorian"
+	repo  = "gli"
+	token = "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"
 )
 
 type Builder struct {
@@ -28,7 +29,7 @@ type Builder struct {
 
 func NewBuilder(cfg config.Config) *Builder {
 	ctx := context.Background()
-	ts := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: ""})
+	ts := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: token})
 	tc := oauth2.NewClient(ctx, ts)
 	client := github.NewClient(tc)
 
@@ -52,7 +53,7 @@ func (b *Builder) DownloadModule(module, technology string) {
 	files := b.Config.ModuleTechnologyFiles(module, technology)
 
 	if technology != "none" && files != nil {
-		log.Printf("Downloading %s/%s\n", module, technology)
+		log.Printf("Module %s/%s\n", module, technology)
 
 		dir := filepath.Join(b.ParentDirectory, "internal", module)
 
