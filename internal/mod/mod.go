@@ -11,6 +11,7 @@ func DownloadModules(cfg config.Config, app *model.App) {
 	requiredModules := app.RequiredModules(cfg.Modules)
 
 	for _, module := range requiredModules {
+		log.Printf("Downloading Module %s:\n", module)
 		downloadModule(module, app.ShortName)
 	}
 
@@ -25,5 +26,5 @@ func downloadModule(module, projectDirectory string) {
 		log.Printf("an error occured during downloading module %s: %s\n", module, err.Error())
 	}
 
-	log.Printf("Module %s: %s\n", module, output)
+	log.Printf("%s\n", output)
 }
