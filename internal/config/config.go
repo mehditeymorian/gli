@@ -5,8 +5,9 @@ import (
 )
 
 type Config struct {
-	Versions []string
-	Modules  map[string][]model.Module
+	Versions        []string
+	Modules         map[string][]model.Module
+	RequiredModules []model.Module
 }
 
 func (c Config) ModuleNames() []string {
