@@ -29,10 +29,37 @@ func (c Config) ModuleOptions(name string) []string {
 	return names
 }
 
-func (c Config) ModuleTechnologyFiles(module, technology string) []string {
+func (c Config) GetRequiredModules(app *model.SurveyResult) []model.Module {
+	modules := make([]model.Module, 0)
+
+	if app.HTTP != model.None {
+		module := c.SearchModule(model.HTTP, app.HTTP)
+		if module != nil {
+			modules = append(modules, *module)
+		}
+	}
+
+	if app.DB != model.None {
+		module := c.SearchModule(model.DB, app.DB)
+		if module != nil {
+			modules = append(modules, *module)
+		}
+	}
+
+	if app.Logger != model.None {
+		module := c.SearchModule(model.Logger, app.Logger)
+		if module != nil {
+			modules = append(modules, *module)
+		}
+	}
+
+	return modules
+}
+
+func (c Config) SearchModule(module, technology string) *model.Module {
 	for _, m := range c.Modules[module] {
 		if m.Name == technology {
-			return m.Files
+			return &m
 		}
 	}
 
