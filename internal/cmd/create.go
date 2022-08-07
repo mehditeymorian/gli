@@ -17,10 +17,12 @@ func Create() *cobra.Command {
 		Run:   run,
 	}
 
+	cmd.Flags().BoolP("verbose", "v", false, "log verbosity")
+
 	return cmd
 }
 
-func run(_ *cobra.Command, _ []string) {
+func run(cmd *cobra.Command, _ []string) {
 	cfg := config.Load()
 
 	surveyResult := model.EmptySurveyResult()
@@ -31,7 +33,18 @@ func run(_ *cobra.Command, _ []string) {
 	app.SelectedModules = cfg.GetRequiredModules(surveyResult)
 	app.RequiredModules = cfg.RequiredModules
 
+	ExtractFlags(cmd, app)
+
 	builder.NewBuilder(cfg).Build(app)
 
 	mod.DownloadModules(app)
+}
+
+func ExtractFlags(cmd *cobra.Command, app *model.App) {
+	verbose, err := cmd.Flags().GetBool("verbose")
+	if err != nil {
+		verbose = false
+	}
+
+	app.Flags[model.Verbose] = verbose
 }
