@@ -5,11 +5,11 @@ import (
 	"fmt"
 	"github.com/google/go-github/v45/github"
 	"github.com/mehditeymorian/gli/internal/config"
+	"github.com/mehditeymorian/gli/internal/logger"
 	"github.com/mehditeymorian/gli/internal/model"
 	"golang.org/x/oauth2"
 	"html/template"
 	"io"
-	"log"
 	"os"
 	"path/filepath"
 	"strings"
@@ -21,14 +21,23 @@ const (
 	token = "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"
 )
 
+type DownloadStatus int
+
+const (
+	FullyDownloaded DownloadStatus = iota
+	PartiallyDownloaded
+	NothingDownloaded
+)
+
 type Builder struct {
 	Client          *github.Client
 	Config          config.Config
 	ParentDirectory string
 	Params          map[string]any
+	Logger          logger.Logger
 }
 
-func NewBuilder(cfg config.Config) *Builder {
+func NewBuilder(cfg config.Config, logger logger.Logger) *Builder {
 	ctx := context.Background()
 	ts := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: token})
 	tc := oauth2.NewClient(ctx, ts)
@@ -37,72 +46,125 @@ func NewBuilder(cfg config.Config) *Builder {
 	return &Builder{
 		Client: client,
 		Config: cfg,
+		Logger: logger,
 	}
 }
 
-func (b *Builder) Build(app *model.App) {
+func (b *Builder) Build(app *model.App) (int, int, int) {
 	b.ParentDirectory = app.ShortName
 	b.Params = app.Params
 
-	for _, module := range app.SelectedModules {
-		b.DownloadModule(module)
+	b.Logger.Title("Downloading Template")
+
+	totalDownloaded := 0
+	partiallyDownloaded := 0
+
+	modules := append(app.SelectedModules, app.RequiredModules...)
+
+	for _, module := range modules {
+		status := b.DownloadModule(module)
+		if status == FullyDownloaded {
+			totalDownloaded++
+		} else if status == PartiallyDownloaded {
+			partiallyDownloaded++
+		}
 	}
 
-	for _, module := range app.RequiredModules {
-		b.DownloadModule(module)
-	}
+	return totalDownloaded, partiallyDownloaded, len(app.SelectedModules) + len(app.RequiredModules)
 }
 
-func (b *Builder) DownloadModule(module model.Module) {
+func (b *Builder) DownloadModule(module model.Module) DownloadStatus {
 	files := module.Files
 
-	log.Printf("Module %s\n", module.Name)
+	moduleName := "Module " + module.Name
+	b.Logger.StartSpinner("\tDownloading " + moduleName)
 
 	savePath := module.GetSavePath(b.ParentDirectory)
 
+	downloaded := 0
+
 	for _, file := range files {
-		log.Printf("Downloading %s\n", file.Name)
+		b.Logger.PrintfV("Downloading %s\n", file.Name)
 
 		fileDownloadURL := module.DownloadURL + file.Name
 		reader, _, err := b.Client.Repositories.DownloadContents(context.Background(), user, repo, fileDownloadURL, nil)
-		handleErr("failed to download content from templates", err)
+		if err != nil {
+			b.Logger.PrintfV("failed to download content from templates: %s\n", err.Error())
 
-		b.SaveFile(reader, savePath, file)
+			continue
+		}
+
+		err = b.SaveFile(reader, savePath, file)
+		if err != nil {
+			b.Logger.PrintfV("failed to save file %s%s: %s\n", savePath, file.Name, err.Error())
+
+			continue
+		}
+
+		downloaded++
 	}
+
+	var status DownloadStatus
+	var msg string
+
+	if downloaded == 0 {
+		msg = "🤕\t" + moduleName + " Didn't Downloaded"
+		status = NothingDownloaded
+	} else if downloaded < len(files) {
+		msg = "😥\t" + moduleName + " Partially Downloaded"
+		status = PartiallyDownloaded
+	} else {
+		// some case except downloaded == len(files) also match in case of error check here.
+		msg = "✅\t" + moduleName + " Downloaded"
+		status = FullyDownloaded
+	}
+
+	b.Logger.StopSpinner(msg)
+
+	return status
 }
 
-func (b *Builder) SaveFile(reader io.ReadCloser, savePath string, moduleFile model.ModuleFile) {
+func (b *Builder) SaveFile(reader io.ReadCloser, savePath string, moduleFile model.ModuleFile) error {
 	if _, err := os.Stat(savePath); os.IsNotExist(err) {
 		err := os.MkdirAll(savePath, os.ModePerm)
-		handleErr("failed to create savePath", err)
+		if err != nil {
+			return fmt.Errorf("failed to create savePath: %w", err)
+		}
 	}
 
 	filePath := filepath.Join(savePath, moduleFile.Name)
 
 	file, err := os.Create(filePath)
-	handleErr("failed to create file", err)
+	if err != nil {
+		return fmt.Errorf("failed to create file: %w", err)
+	}
 
 	if moduleFile.RequireParsing {
 		buf := new(strings.Builder)
 		_, err := io.Copy(buf, reader)
-		handleErr("failed to copy content to buffer", err)
+		if err != nil {
+			return fmt.Errorf("failed to copy content to buffer: %w", err)
+		}
 
 		temp := template.Must(template.New(moduleFile.Name).Parse(buf.String()))
 
 		result := new(strings.Builder)
 
 		err = temp.Execute(result, b.Params)
-		handleErr("failed to execute template", err)
+		if err != nil {
+			return fmt.Errorf("failed to execute template: %w", err)
+		}
 
 		_, err = file.Write([]byte(result.String()))
+		if err != nil {
+			return fmt.Errorf("failed to write to file: %w", err)
+		}
 	} else {
 		_, err = io.Copy(file, reader)
-		handleErr("failed to copy content to file", err)
+		if err != nil {
+			return fmt.Errorf("failed to copy content to file: %w", err)
+		}
 	}
-}
 
-func handleErr(message string, err error) {
-	if err != nil {
-		panic(fmt.Errorf("%s: %w", message, err))
-	}
+	return nil
 }

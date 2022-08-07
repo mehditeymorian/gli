@@ -53,6 +53,7 @@ func (a *SurveyResult) Execute() *App {
 		Name:            a.Name,
 		ShortName:       a.ShortName,
 		Params:          a.Params(),
+		Flags:           make(map[Flag]bool),
 		SelectedModules: nil,
 		RequiredModules: nil,
 	}
