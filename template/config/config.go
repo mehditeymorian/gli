@@ -12,15 +12,9 @@ import (
 	"github.com/knadh/koanf/providers/file"
 	"github.com/knadh/koanf/providers/structs"
 	"github.com/tidwall/pretty"
-	{{if .HasDB}}
-	"{{ .Name }}/internal/db"
-	{{end}}
-	{{if .HasLogger}}
-	"{{ .Name }}/internal/logger"
-	{{end}}
-	{{if .HasHTTP}}
-	"{{ .Name }}/internal/http"
-	{{end}}
+	{{if .HasDB}}"{{ .Name }}/internal/db"{{end}}
+	{{if .HasLogger}}"{{ .Name }}/internal/logger"{{end}}
+	{{if .HasHTTP}}"{{ .Name }}/internal/http"{{end}}
 )
 
 const (
@@ -29,15 +23,9 @@ const (
 )
 
 type Config struct {
-	{{if .HasDB}}
-	DB db.Config
-	{{end}}
-	{{if .HasLogger}}
-	Logger logger.Config
-	{{end}}
-	{{if .HasHTTP}}
-	HTTP http.Config
-	{{end}}
+	{{if .HasDB}}DB db.Config{{end}}
+	{{if .HasLogger}}Logger logger.Config{{end}}
+	{{if .HasHTTP}}HTTP http.Config{{end}}
 }
 
 func Load(path string) Config {
