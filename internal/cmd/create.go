@@ -39,7 +39,7 @@ func run(cmd *cobra.Command, _ []string) {
 
 	log := logger.NewLogger(app.Flags[model.Verbose])
 
-	builder.NewBuilder(cfg, log).Build(app)
+	totalDownloadedModules, partiallyDownloadedModules, totalModules := builder.NewBuilder(cfg, log).Build(app)
 
 	totalDownloadedPackages, totalPackages := mod.DownloadModules(app, log)
 
@@ -47,7 +47,10 @@ func run(cmd *cobra.Command, _ []string) {
 	figure.NewFigure(app.ShortName, "doom", true).Print()
 	log.EmptyLine()
 	log.Printf("📝 Summary\n")
-	log.Printf("🔥 5/5 Template Downloaded\n")
+	log.Printf("🔥 %d/%d Template Downloaded\n", totalDownloadedModules, totalModules)
+	if partiallyDownloadedModules > 0 {
+		log.Printf("😥 %d/%d Template Partially Downloaded\n", totalDownloadedModules, totalModules)
+	}
 	log.Printf("🔥 %d/%d Package Downloaded\n", totalDownloadedPackages, totalPackages)
 	log.EmptyLine()
 	log.Printf("%s is Ready! 😎🙌\n", app.ShortName)
