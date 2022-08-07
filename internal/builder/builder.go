@@ -146,7 +146,11 @@ func (b *Builder) SaveFile(reader io.ReadCloser, savePath string, moduleFile mod
 			return fmt.Errorf("failed to copy content to buffer: %w", err)
 		}
 
-		temp := template.Must(template.New(moduleFile.Name).Parse(buf.String()))
+		funcMap := template.FuncMap{
+			"toUpper": strings.ToUpper,
+		}
+
+		temp := template.Must(template.New(moduleFile.Name).Funcs(funcMap).Parse(buf.String()))
 
 		result := new(strings.Builder)
 
