@@ -5,11 +5,11 @@ import (
 	"fmt"
 	"github.com/google/go-github/v45/github"
 	"github.com/mehditeymorian/gli/internal/config"
+	"github.com/mehditeymorian/gli/internal/logger"
 	"github.com/mehditeymorian/gli/internal/model"
 	"golang.org/x/oauth2"
 	"html/template"
 	"io"
-	"log"
 	"os"
 	"path/filepath"
 	"strings"
@@ -26,9 +26,10 @@ type Builder struct {
 	Config          config.Config
 	ParentDirectory string
 	Params          map[string]any
+	Logger          logger.Logger
 }
 
-func NewBuilder(cfg config.Config) *Builder {
+func NewBuilder(cfg config.Config, logger logger.Logger) *Builder {
 	ctx := context.Background()
 	ts := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: token})
 	tc := oauth2.NewClient(ctx, ts)
@@ -37,6 +38,7 @@ func NewBuilder(cfg config.Config) *Builder {
 	return &Builder{
 		Client: client,
 		Config: cfg,
+		Logger: logger,
 	}
 }
 
@@ -56,12 +58,12 @@ func (b *Builder) Build(app *model.App) {
 func (b *Builder) DownloadModule(module model.Module) {
 	files := module.Files
 
-	log.Printf("Module %s\n", module.Name)
+	b.Logger.Printf("Module %s\n", module.Name)
 
 	savePath := module.GetSavePath(b.ParentDirectory)
 
 	for _, file := range files {
-		log.Printf("Downloading %s\n", file.Name)
+		b.Logger.PrintfV("Downloading %s\n", file.Name)
 
 		fileDownloadURL := module.DownloadURL + file.Name
 		reader, _, err := b.Client.Repositories.DownloadContents(context.Background(), user, repo, fileDownloadURL, nil)

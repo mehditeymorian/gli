@@ -3,6 +3,7 @@ package cmd
 import (
 	"github.com/mehditeymorian/gli/internal/builder"
 	"github.com/mehditeymorian/gli/internal/config"
+	"github.com/mehditeymorian/gli/internal/logger"
 	"github.com/mehditeymorian/gli/internal/mod"
 	"github.com/mehditeymorian/gli/internal/model"
 	"github.com/mehditeymorian/gli/internal/question"
@@ -35,9 +36,11 @@ func run(cmd *cobra.Command, _ []string) {
 
 	ExtractFlags(cmd, app)
 
-	builder.NewBuilder(cfg).Build(app)
+	log := logger.Logger{Verbose: app.Flags[model.Verbose]}
 
-	mod.DownloadModules(app)
+	builder.NewBuilder(cfg, log).Build(app)
+
+	mod.DownloadModules(app, log)
 }
 
 func ExtractFlags(cmd *cobra.Command, app *model.App) {
