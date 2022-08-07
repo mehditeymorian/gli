@@ -12,7 +12,9 @@ func DownloadModules(app *model.App, logger logger.Logger) (int, int) {
 	totalDownloaded := 0
 	total := 0
 
-	for _, module := range app.SelectedModules {
+	modules := append(app.SelectedModules, app.RequiredModules...)
+
+	for _, module := range modules {
 		if len(module.Package) == 0 {
 			continue
 		}
