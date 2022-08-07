@@ -13,21 +13,24 @@ func DownloadModules(app *model.App, logger logger.Logger) (int, int) {
 	total := 0
 
 	for _, module := range app.SelectedModules {
-		if module.Package == "" {
+		if len(module.Package) == 0 {
 			continue
 		}
 
-		total++
+		total += len(module.Package)
 
-		logger.StartSpinner("\tgo get " + module.Package)
-		err := downloadModule(module.Package, app.ShortName, logger)
-		if err != nil {
-			logger.PrintfV("an error occurred during downloading module %s: %s\n", module, err.Error())
-			logger.StopSpinner("🤕\tFailed to Get " + module.Package)
-		} else {
-			logger.StopSpinner("✅\tGot " + module.Package)
-			totalDownloaded++
+		for _, modulePackage := range module.Package {
+			logger.StartSpinner("\tgo get " + modulePackage)
+			err := downloadModule(modulePackage, app.ShortName, logger)
+			if err != nil {
+				logger.PrintfV("an error occurred during downloading module %s: %s\n", module, err.Error())
+				logger.StopSpinner("🤕\tFailed to Get " + modulePackage)
+			} else {
+				logger.StopSpinner("✅\tGot " + modulePackage)
+				totalDownloaded++
+			}
 		}
+
 	}
 
 	return totalDownloaded, total

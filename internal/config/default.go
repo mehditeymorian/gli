@@ -23,7 +23,7 @@ func Default() Config {
 				Name:        "Others",
 				DownloadURL: "template/",
 				SavePath:    nil,
-				Package:     "",
+				Package:     nil,
 				Files: []model.ModuleFile{
 					{
 						Name:           "go.mod",
@@ -41,7 +41,7 @@ func DockerfileModule() []model.Module {
 			Name:        "Dockerfile",
 			DownloadURL: "template/",
 			SavePath:    nil,
-			Package:     "",
+			Package:     nil,
 			Files: []model.ModuleFile{
 				{
 					Name:           "Dockerfile",
@@ -62,7 +62,7 @@ func LoggerModules() []model.Module {
 			Name:        "zap",
 			DownloadURL: "template/logger/zap/",
 			SavePath:    []string{"internal", "logger"},
-			Package:     "go.uber.org/zap@latest",
+			Package:     []string{"go.uber.org/zap@latest"},
 			Files: []model.ModuleFile{
 				{
 					Name:           "config.go",
@@ -116,7 +116,7 @@ func DBModules() []model.Module {
 			Name:        "mongo",
 			DownloadURL: "template/db/mongo/",
 			SavePath:    []string{"internal", "db"},
-			Package:     "go.mongodb.org/mongo-driver/mongo",
+			Package:     []string{"go.mongodb.org/mongo-driver/mongo"},
 			Files: []model.ModuleFile{
 				{
 					Name:           "config.go",

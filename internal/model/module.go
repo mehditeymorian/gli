@@ -13,7 +13,7 @@ type Module struct {
 	SavePath []string
 
 	// Package module package to download
-	Package string
+	Package []string
 
 	Files []ModuleFile
 }
