@@ -20,6 +20,22 @@ func Default() Config {
 		},
 		RequiredModules: []model.Module{
 			{
+				Name:        "config",
+				DownloadURL: "template/config/",
+				SavePath:    []string{"internal", "config"},
+				Package:     []string{"github.com/knadh/koanf@latest", "github.com/tidwall/pretty@latest"},
+				Files: []model.ModuleFile{
+					{
+						Name:           "config.go",
+						RequireParsing: true,
+					},
+					{
+						Name:           "default.go",
+						RequireParsing: true,
+					},
+				},
+			},
+			{
 				Name:        "Others",
 				DownloadURL: "template/",
 				SavePath:    nil,
