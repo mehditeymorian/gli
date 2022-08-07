@@ -44,13 +44,13 @@ func (l *Logger) EmptyLine() {
 	fmt.Println()
 }
 
-func (l *Logger) StartSpinner(spinningMessage, finalMessage string) {
+func (l *Logger) StartSpinner(spinningMessage string) {
 	l.Spinner.Suffix = spinningMessage
-	l.Spinner.FinalMSG = finalMessage
 	l.Spinner.Start()
 }
 
-func (l *Logger) StopSpinner() {
+func (l *Logger) StopSpinner(finalMessage string) {
+	l.Spinner.FinalMSG = finalMessage
 	l.Spinner.Stop()
 	fmt.Println()
 }
