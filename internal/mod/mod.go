@@ -10,11 +10,14 @@ func DownloadModules(app *model.App, logger logger.Logger) (int, int) {
 	logger.Title("Downloading Packages")
 
 	totalDownloaded := 0
+	total := 0
 
 	for _, module := range app.SelectedModules {
 		if module.Package == "" {
 			continue
 		}
+
+		total++
 
 		logger.StartSpinner("\tgo get " + module.Package)
 		err := downloadModule(module.Package, app.ShortName, logger)
@@ -27,7 +30,7 @@ func DownloadModules(app *model.App, logger logger.Logger) (int, int) {
 		}
 	}
 
-	return totalDownloaded, len(app.SelectedModules)
+	return totalDownloaded, total
 }
 
 func downloadModule(module, projectDirectory string, logger logger.Logger) error {
