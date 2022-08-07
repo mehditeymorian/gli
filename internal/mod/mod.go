@@ -6,29 +6,39 @@ import (
 	"os/exec"
 )
 
-func DownloadModules(app *model.App, logger logger.Logger) {
+func DownloadModules(app *model.App, logger logger.Logger) (int, int) {
 	logger.Title("Downloading Packages")
+
+	totalDownloaded := 0
 
 	for _, module := range app.SelectedModules {
 		if module.Package == "" {
 			continue
 		}
 
-		logger.StartSpinner("\tgo get "+module.Package, "✅\tGot "+module.Package)
-		downloadModule(module.Package, app.ShortName, logger)
-		logger.StopSpinner()
+		logger.StartSpinner("\tgo get " + module.Package)
+		err := downloadModule(module.Package, app.ShortName, logger)
+		if err != nil {
+			logger.PrintfV("an error occurred during downloading module %s: %s\n", module, err.Error())
+			logger.StopSpinner("🤕\tFailed to Get " + module.Package)
+		} else {
+			logger.StopSpinner("✅\tGot " + module.Package)
+			totalDownloaded++
+		}
 	}
 
+	return totalDownloaded, len(app.SelectedModules)
 }
 
-func downloadModule(module, projectDirectory string, logger logger.Logger) {
+func downloadModule(module, projectDirectory string, logger logger.Logger) error {
 	cmd := exec.Command("go", "get", module)
 	cmd.Dir = projectDirectory + "/"
 
 	output, err := cmd.CombinedOutput()
 	if err != nil {
-		logger.Printf("an error occurred during downloading module %s: %s\n", module, err.Error())
+		return err
 	}
 
 	logger.PrintfV("%s\n", output)
+	return nil
 }

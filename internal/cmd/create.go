@@ -41,14 +41,14 @@ func run(cmd *cobra.Command, _ []string) {
 
 	builder.NewBuilder(cfg, log).Build(app)
 
-	mod.DownloadModules(app, log)
+	totalDownloadedPackages, totalPackages := mod.DownloadModules(app, log)
 
 	log.Separator()
 	figure.NewFigure(app.ShortName, "doom", true).Print()
 	log.EmptyLine()
 	log.Printf("📝 Summary\n")
 	log.Printf("🔥 5/5 Template Downloaded\n")
-	log.Printf("🔥 3/3 Package Downloaded\n")
+	log.Printf("🔥 %d/%d Package Downloaded\n", totalDownloadedPackages, totalPackages)
 	log.EmptyLine()
 	log.Printf("%s is Ready! 😎🙌\n", app.ShortName)
 
