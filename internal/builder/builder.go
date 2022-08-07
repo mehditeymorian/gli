@@ -58,7 +58,8 @@ func (b *Builder) Build(app *model.App) {
 func (b *Builder) DownloadModule(module model.Module) {
 	files := module.Files
 
-	b.Logger.Printf("Module %s\n", module.Name)
+	moduleName := "Module " + module.Name
+	b.Logger.StartSpinner("\tDownloading "+moduleName, "✅\t"+moduleName+" Downloaded")
 
 	savePath := module.GetSavePath(b.ParentDirectory)
 
@@ -71,6 +72,8 @@ func (b *Builder) DownloadModule(module model.Module) {
 
 		b.SaveFile(reader, savePath, file)
 	}
+
+	b.Logger.StopSpinner()
 }
 
 func (b *Builder) SaveFile(reader io.ReadCloser, savePath string, moduleFile model.ModuleFile) {

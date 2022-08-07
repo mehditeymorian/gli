@@ -12,9 +12,9 @@ func DownloadModules(app *model.App, logger logger.Logger) {
 			continue
 		}
 
-		logger.Printf("Downloading Module %s:\n", module.Name)
-		logger.PrintfV("go get %s\n", module.Package)
+		logger.StartSpinner("\tgo get "+module.Package, "✅\tGot "+module.Package)
 		downloadModule(module.Package, app.ShortName, logger)
+		logger.StopSpinner()
 	}
 
 }
