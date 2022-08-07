@@ -6,4 +6,5 @@ type App struct {
 	Params          map[string]any
 	SelectedModules []Module
 	RequiredModules []Module
+	Flags           map[Flag]bool
 }
