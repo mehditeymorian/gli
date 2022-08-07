@@ -7,3 +7,7 @@ const (
 	Logger     = "logger"
 	Dockerfile = "Dockerfile"
 )
+
+type Flag string
+
+const Verbose Flag = "verbose"
