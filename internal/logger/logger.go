@@ -40,6 +40,10 @@ func (l *Logger) Separator() {
 	fmt.Println("██████████████████████████████████████████")
 }
 
+func (l *Logger) EmptyLine() {
+	fmt.Println()
+}
+
 func (l *Logger) StartSpinner(spinningMessage, finalMessage string) {
 	l.Spinner.Suffix = spinningMessage
 	l.Spinner.FinalMSG = finalMessage
