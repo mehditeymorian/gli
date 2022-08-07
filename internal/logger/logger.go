@@ -3,7 +3,6 @@ package logger
 import (
 	"fmt"
 	"github.com/briandowns/spinner"
-	"log"
 	"time"
 )
 
@@ -22,7 +21,7 @@ func NewLogger(verbose bool) Logger {
 }
 
 func (l *Logger) Printf(format string, args ...any) {
-	log.Printf(format, args...)
+	fmt.Printf(format, args...)
 }
 
 func (l *Logger) PrintfV(format string, args ...any) {
@@ -31,6 +30,10 @@ func (l *Logger) PrintfV(format string, args ...any) {
 	}
 
 	l.Printf(format, args)
+}
+
+func (l *Logger) Title(title string) {
+	fmt.Printf("██████████ %s ██████████\n", title)
 }
 
 func (l *Logger) StartSpinner(spinningMessage, finalMessage string) {

@@ -7,6 +7,8 @@ import (
 )
 
 func DownloadModules(app *model.App, logger logger.Logger) {
+	logger.Title("Downloading Packages")
+
 	for _, module := range app.SelectedModules {
 		if module.Package == "" {
 			continue

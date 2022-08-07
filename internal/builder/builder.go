@@ -46,6 +46,8 @@ func (b *Builder) Build(app *model.App) {
 	b.ParentDirectory = app.ShortName
 	b.Params = app.Params
 
+	b.Logger.Title("Downloading Template")
+
 	for _, module := range app.SelectedModules {
 		b.DownloadModule(module)
 	}
