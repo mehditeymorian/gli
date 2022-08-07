@@ -36,7 +36,7 @@ func run(cmd *cobra.Command, _ []string) {
 
 	ExtractFlags(cmd, app)
 
-	log := logger.Logger{Verbose: app.Flags[model.Verbose]}
+	log := logger.NewLogger(app.Flags[model.Verbose])
 
 	builder.NewBuilder(cfg, log).Build(app)
 

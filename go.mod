@@ -10,6 +10,8 @@ require (
 )
 
 require (
+	github.com/briandowns/spinner v1.19.0 // indirect
+	github.com/fatih/color v1.7.0 // indirect
 	github.com/golang/protobuf v1.3.2 // indirect
 	github.com/google/go-querystring v1.1.0 // indirect
 	github.com/inconshreveable/mousetrap v1.0.0 // indirect
