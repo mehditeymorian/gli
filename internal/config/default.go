@@ -13,9 +13,10 @@ func Default() Config {
 			"1.15",
 		},
 		Modules: map[string][]model.Module{
-			model.DB:     DBModules(),
-			model.HTTP:   HTTPModules(),
-			model.Logger: LoggerModules(),
+			model.DB:         DBModules(),
+			model.HTTP:       HTTPModules(),
+			model.Logger:     LoggerModules(),
+			model.Dockerfile: DockerfileModule(),
 		},
 		RequiredModules: []model.Module{
 			{
@@ -25,13 +26,26 @@ func Default() Config {
 				Package:     "",
 				Files: []model.ModuleFile{
 					{
-						Name:           "Dockerfile",
-						RequireParsing: false,
-					},
-					{
 						Name:           "go.mod",
 						RequireParsing: true,
 					},
+				},
+			},
+		},
+	}
+}
+
+func DockerfileModule() []model.Module {
+	return []model.Module{
+		{
+			Name:        "Dockerfile",
+			DownloadURL: "template/",
+			SavePath:    nil,
+			Package:     "",
+			Files: []model.ModuleFile{
+				{
+					Name:           "Dockerfile",
+					RequireParsing: false,
 				},
 			},
 		},

@@ -1,8 +1,9 @@
 package model
 
 const (
-	None   = "none"
-	DB     = "db"
-	HTTP   = "http"
-	Logger = "logger"
+	None       = "none"
+	DB         = "db"
+	HTTP       = "http"
+	Logger     = "logger"
+	Dockerfile = "Dockerfile"
 )

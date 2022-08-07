@@ -12,7 +12,12 @@ type Config struct {
 
 func (c Config) ModuleNames() []string {
 	modules := make([]string, 0)
-	for module, _ := range c.Modules {
+	for module, val := range c.Modules {
+		// modules with 1 option are yes or no type of questions, and they are mandatory to ask from user.
+		if len(val) < 2 {
+			continue
+		}
+
 		modules = append(modules, module)
 	}
 
@@ -51,6 +56,11 @@ func (c Config) GetRequiredModules(app *model.SurveyResult) []model.Module {
 		if module != nil {
 			modules = append(modules, *module)
 		}
+	}
+
+	if app.Dockerfile {
+		module := c.SearchModule(model.Dockerfile, model.Dockerfile)
+		modules = append(modules, *module)
 	}
 
 	return modules
