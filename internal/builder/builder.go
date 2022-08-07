@@ -25,6 +25,7 @@ type Builder struct {
 	Client          *github.Client
 	Config          config.Config
 	ParentDirectory string
+	Params          map[string]any
 }
 
 func NewBuilder(cfg config.Config) *Builder {
@@ -41,84 +42,56 @@ func NewBuilder(cfg config.Config) *Builder {
 
 func (b *Builder) Build(app *model.App) {
 	b.ParentDirectory = app.ShortName
+	b.Params = app.Params
 
-	b.DownloadModule(model.HTTP, app.HTTP)
-	b.DownloadModule(model.DB, app.DB)
-	b.DownloadModule(model.Logger, app.Logger)
-	b.DownloadSingle("Dockerfile", app.Dockerfile, "", false, app)
-	b.DownloadSingle("go.mod", true, "", true, app)
-}
+	for _, module := range app.SelectedModules {
+		b.DownloadModule(module)
+	}
 
-func (b *Builder) DownloadModule(module, technology string) {
-	files := b.Config.ModuleTechnologyFiles(module, technology)
-
-	if technology != "none" && files != nil {
-		log.Printf("Module %s/%s\n", module, technology)
-
-		dir := filepath.Join(b.ParentDirectory, "internal", module)
-
-		for _, file := range files {
-			log.Printf("Downloading %s\n", file)
-
-			path := "template/" + module + "/" + technology + "/" + file
-			reader, _, err := b.Client.Repositories.DownloadContents(context.Background(), user, repo, path, nil)
-			handleErr("failed to download content from templates", err)
-
-			if _, err := os.Stat(dir); os.IsNotExist(err) {
-				err := os.MkdirAll(dir, os.ModePerm)
-				handleErr("failed to create module directory", err)
-			}
-
-			file, err := os.Create(dir + "/" + file)
-			handleErr("failed to create file", err)
-
-			_, err = io.Copy(file, reader)
-			handleErr("failed to copy content to file", err)
-
-		}
-
+	for _, module := range app.RequiredModules {
+		b.DownloadModule(module)
 	}
 }
 
-func (b *Builder) DownloadSingle(fileName string, required bool, directory string, requireParsing bool, app *model.App) {
-	if !required {
-		return
+func (b *Builder) DownloadModule(module model.Module) {
+	files := module.Files
+
+	log.Printf("Module %s\n", module.Name)
+
+	savePath := module.GetSavePath(b.ParentDirectory)
+
+	for _, file := range files {
+		log.Printf("Downloading %s\n", file.Name)
+
+		fileDownloadURL := module.DownloadURL + file.Name
+		reader, _, err := b.Client.Repositories.DownloadContents(context.Background(), user, repo, fileDownloadURL, nil)
+		handleErr("failed to download content from templates", err)
+
+		b.SaveFile(reader, savePath, file)
+	}
+}
+
+func (b *Builder) SaveFile(reader io.ReadCloser, savePath string, moduleFile model.ModuleFile) {
+	if _, err := os.Stat(savePath); os.IsNotExist(err) {
+		err := os.MkdirAll(savePath, os.ModePerm)
+		handleErr("failed to create savePath", err)
 	}
 
-	log.Printf("Downloading %s\n", fileName)
-
-	path := "template/" + fileName
-
-	if directory != "" {
-		err := os.MkdirAll(directory, os.ModePerm)
-		handleErr("failed to create directory", err)
-	}
-
-	var filePath string
-	if directory != "" {
-		filePath = filepath.Join(b.ParentDirectory, directory, fileName)
-	} else {
-		filePath = filepath.Join(b.ParentDirectory, fileName)
-	}
-
-	reader, _, err := b.Client.Repositories.DownloadContents(context.Background(), user, repo, path, nil)
-	handleErr("failed to download content from templates", err)
+	filePath := filepath.Join(savePath, moduleFile.Name)
 
 	file, err := os.Create(filePath)
 	handleErr("failed to create file", err)
 
-	if requireParsing {
+	if moduleFile.RequireParsing {
 		buf := new(strings.Builder)
 		_, err := io.Copy(buf, reader)
 		handleErr("failed to copy content to buffer", err)
 
-		temp := template.Must(template.New(fileName).Parse(buf.String()))
-
-		params := app.Params()
+		temp := template.Must(template.New(moduleFile.Name).Parse(buf.String()))
 
 		result := new(strings.Builder)
 
-		err = temp.Execute(result, params)
+		err = temp.Execute(result, b.Params)
 		handleErr("failed to execute template", err)
 
 		_, err = file.Write([]byte(result.String()))

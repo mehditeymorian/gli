@@ -17,7 +17,7 @@ func New(cfg config.Config) Question {
 	}
 }
 
-func (q Question) Fill(app *model.App) {
+func (q Question) Fill(app *model.SurveyResult) {
 	err := survey.Ask(InitialQuestions(q.Config), app)
 	handleErr("failed to ask general questions", err)
 

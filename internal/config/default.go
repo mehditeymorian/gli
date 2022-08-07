@@ -13,59 +13,122 @@ func Default() Config {
 			"1.15",
 		},
 		Modules: map[string][]model.Module{
-			model.DB: {
-				{
-					Name:  model.None,
-					Files: nil,
-				},
-				{
-					Name:  "mysql",
-					Files: []string{},
-				},
-				{
-					Name:  "postgres",
-					Files: []string{},
-				},
-				{
-					Name: "mongo",
-					Files: []string{
-						"config.go",
-						"mongo.go",
-						"mongo_test.go",
+			model.DB:         DBModules(),
+			model.HTTP:       HTTPModules(),
+			model.Logger:     LoggerModules(),
+			model.Dockerfile: DockerfileModule(),
+		},
+		RequiredModules: []model.Module{
+			{
+				Name:        "Others",
+				DownloadURL: "template/",
+				SavePath:    nil,
+				Package:     "",
+				Files: []model.ModuleFile{
+					{
+						Name:           "go.mod",
+						RequireParsing: true,
 					},
-					Package: "go.mongodb.org/mongo-driver/mongo",
 				},
 			},
-			model.HTTP: {
+		},
+	}
+}
+
+func DockerfileModule() []model.Module {
+	return []model.Module{
+		{
+			Name:        "Dockerfile",
+			DownloadURL: "template/",
+			SavePath:    nil,
+			Package:     "",
+			Files: []model.ModuleFile{
 				{
-					Name:  model.None,
-					Files: []string{},
-				},
-				{
-					Name:  "gofiber",
-					Files: []string{},
-				},
-				{
-					Name:  "echo",
-					Files: []string{},
-				},
-				{
-					Name:  "gin",
-					Files: []string{},
+					Name:           "Dockerfile",
+					RequireParsing: false,
 				},
 			},
-			model.Logger: {
+		},
+	}
+}
+
+func LoggerModules() []model.Module {
+	return []model.Module{
+		{
+			Name:  model.None,
+			Files: nil,
+		},
+		{
+			Name:        "zap",
+			DownloadURL: "template/logger/zap/",
+			SavePath:    []string{"internal", "logger"},
+			Package:     "go.uber.org/zap@latest",
+			Files: []model.ModuleFile{
 				{
-					Name:  model.None,
-					Files: []string{},
+					Name:           "config.go",
+					RequireParsing: false,
 				},
 				{
-					Name: "zap",
-					Files: []string{
-						"config.go",
-						"log.go",
-					},
-					Package: "go.uber.org/zap@latest",
+					Name:           "log.go",
+					RequireParsing: false,
+				},
+			},
+		},
+	}
+}
+
+func HTTPModules() []model.Module {
+	return []model.Module{
+		{
+			Name:  model.None,
+			Files: nil,
+		},
+		{
+			Name:  "gofiber",
+			Files: nil,
+		},
+		{
+			Name:  "echo",
+			Files: nil,
+		},
+		{
+			Name:  "gin",
+			Files: nil,
+		},
+	}
+}
+
+func DBModules() []model.Module {
+	return []model.Module{
+		{
+			Name:  model.None,
+			Files: nil,
+		},
+		{
+			Name:  "mysql",
+			Files: nil,
+		},
+		{
+			Name:  "postgres",
+			Files: nil,
+		},
+		{
+			Name:        "mongo",
+			DownloadURL: "template/db/mongo/",
+			SavePath:    []string{"internal", "db"},
+			Package:     "go.mongodb.org/mongo-driver/mongo",
+			Files: []model.ModuleFile{
+				{
+					Name:           "config.go",
+					RequireParsing: false,
+				},
+				{
+					Name:           "mongo.go",
+					RequireParsing: false,
+				},
+				{
+					Name:           "mongo_test.go",
+					RequireParsing: false,
 				},
 			},
 		},

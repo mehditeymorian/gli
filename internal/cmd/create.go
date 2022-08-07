@@ -23,13 +23,15 @@ func Create() *cobra.Command {
 func run(_ *cobra.Command, _ []string) {
 	cfg := config.Load()
 
-	app := model.EmptyApp()
+	surveyResult := model.EmptySurveyResult()
 
-	question.New(cfg).Fill(app)
+	question.New(cfg).Fill(surveyResult)
 
-	app.Execute()
+	app := surveyResult.Execute()
+	app.SelectedModules = cfg.GetRequiredModules(surveyResult)
+	app.RequiredModules = cfg.RequiredModules
 
 	builder.NewBuilder(cfg).Build(app)
 
-	mod.DownloadModules(cfg, app)
+	mod.DownloadModules(app)
 }
