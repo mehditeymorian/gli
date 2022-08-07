@@ -12,13 +12,13 @@ import (
 	"github.com/knadh/koanf/providers/file"
 	"github.com/knadh/koanf/providers/structs"
 	"github.com/tidwall/pretty"
-	{{if .HashDB}}
+	{{if .HasDB}}
 	"{{ .Name }}/internal/db"
 	{{end}}
-	{{if .HashLogger}}
+	{{if .HasLogger}}
 	"{{ .Name }}/internal/logger"
 	{{end}}
-	{{if .HashHTTP}}
+	{{if .HasHTTP}}
 	"{{ .Name }}/internal/http"
 	{{end}}
 )
@@ -29,13 +29,13 @@ const (
 )
 
 type Config struct {
-	{{if .HashDB}}
+	{{if .HasDB}}
 	DB db.Config
 	{{end}}
-	{{if .HashLogger}}
+	{{if .HasLogger}}
 	Logger logger.Config
 	{{end}}
-	{{if .HashHTTP}}
+	{{if .HasHTTP}}
 	HTTP http.Config
 	{{end}}
 }
