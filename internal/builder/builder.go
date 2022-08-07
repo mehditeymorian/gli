@@ -108,7 +108,7 @@ func (b *Builder) DownloadModule(module model.Module) DownloadStatus {
 	var msg string
 
 	if downloaded == 0 {
-		msg = "🤕\t" + moduleName + " Didn't Downloaded"
+		msg = "🤕\t" + moduleName + " Didn't Download"
 		status = NothingDownloaded
 	} else if downloaded < len(files) {
 		msg = "😥\t" + moduleName + " Partially Downloaded"
