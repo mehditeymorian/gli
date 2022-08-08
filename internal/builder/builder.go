@@ -84,6 +84,7 @@ func (b *Builder) DownloadModule(module model.Module) DownloadStatus {
 	downloaded := 0
 
 	for _, file := range files {
+		b.Logger.SetSpinnerMessage("-> " + file.Name)
 		b.Logger.PrintfV("Downloading %s\n", file.Name)
 
 		fileDownloadURL := module.DownloadURL + file.Name
