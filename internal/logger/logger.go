@@ -31,7 +31,9 @@ func (l *Logger) Buffer() {
 
 func (l *Logger) Flush() {
 	log := l.LogBuffer.String()
-	fmt.Println(log)
+	if l.LogBuffer.Len() > 0 {
+		fmt.Print(log)
+	}
 	l.LogBuffer = nil
 	l.Buffering = false
 }
