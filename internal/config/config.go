@@ -58,6 +58,18 @@ func (c Config) GetRequiredModules(app *model.SurveyResult) []model.Module {
 		}
 	}
 
+	if app.CliType {
+		module := c.SearchModule(model.StartPoint, model.StartPointCli)
+		if module != nil {
+			modules = append(modules, *module)
+		}
+	} else {
+		module := c.SearchModule(model.StartPoint, model.StartPointSimple)
+		if module != nil {
+			modules = append(modules, *module)
+		}
+	}
+
 	if app.Dockerfile {
 		module := c.SearchModule(model.Dockerfile, model.Dockerfile)
 		modules = append(modules, *module)
