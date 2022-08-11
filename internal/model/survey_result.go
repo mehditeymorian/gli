@@ -54,6 +54,7 @@ func (a *SurveyResult) Execute() *App {
 	return &App{
 		Name:            a.Name,
 		ShortName:       a.ShortName,
+		CliName:         a.CliName,
 		Params:          a.Params(),
 		Flags:           make(map[Flag]bool),
 		SelectedModules: nil,

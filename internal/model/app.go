@@ -3,6 +3,7 @@ package model
 type App struct {
 	Name            string
 	ShortName       string
+	CliName         string
 	Params          map[string]any
 	SelectedModules []Module
 	RequiredModules []Module
