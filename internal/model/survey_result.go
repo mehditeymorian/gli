@@ -13,6 +13,8 @@ type SurveyResult struct {
 	Logger     string
 	DB         string
 	HTTP       string
+	CliName    string
+	CliType    bool
 	Dockerfile bool
 }
 
