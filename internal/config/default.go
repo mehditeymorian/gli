@@ -77,11 +77,11 @@ func StartPointModules() model.ModuleGroup {
 					Name:             "main.go",
 					SeparateSavePath: true,
 					SavePath:         nil,
-					RequireParsing:   false,
+					RequireParsing:   true,
 				},
 				{
 					Name:             "root.go",
-					RequireParsing:   false,
+					RequireParsing:   true,
 					SeparateSavePath: true,
 					SavePath:         []string{"cmd"},
 				},
