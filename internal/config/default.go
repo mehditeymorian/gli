@@ -25,6 +25,7 @@ func Default() Config {
 	}
 }
 
+// region Required Modules
 func modModule() model.Module {
 	return model.Module{
 		Name:        "Others",
@@ -58,6 +59,10 @@ func configModule() model.Module {
 		},
 	}
 }
+
+// endregion
+
+// region Selectable modules
 
 func DockerfileModule() model.ModuleGroup {
 	modules := []model.Module{
@@ -175,3 +180,5 @@ func DBModules() model.ModuleGroup {
 		Modules:    modules,
 	}
 }
+
+// endregion
