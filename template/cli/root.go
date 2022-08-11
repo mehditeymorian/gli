@@ -14,7 +14,7 @@ func Execute() {
 	}
 
 	root.AddCommands(
-		cmd.{{ capitalize .CliName }},
+		cmd.{{ capitalize .CliName }}(),
 		)
 
 
