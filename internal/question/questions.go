@@ -24,6 +24,14 @@ func (q Question) Fill(app *model.SurveyResult) {
 	err = survey.Ask(ModuleQuestions(app.Modules, q.Config), app)
 	handleErr("failed to ask modules", err)
 
+	err = survey.AskOne(StartPointQuestion(), &app.CliType)
+	handleErr("failed to ask start point", err)
+
+	if app.CliType {
+		err = survey.AskOne(CliNameQuestion(), &app.CliName)
+		handleErr("failed to ask cli name", err)
+	}
+
 	err = survey.AskOne(DockerfileQuestion(), &app.Dockerfile)
 	handleErr("failed to ask dockerfile", err)
 }
@@ -70,6 +78,21 @@ func DockerfileQuestion() *survey.Confirm {
 	return &survey.Confirm{
 		Default: false,
 		Message: "Do you want to create a Dockerfile?",
+	}
+}
+
+func StartPointQuestion() *survey.Confirm {
+	return &survey.Confirm{
+		Message: "Do you want a cli app?",
+		Default: false,
+		Help:    "cli:yes, simple:no",
+	}
+}
+
+func CliNameQuestion() *survey.Input {
+	return &survey.Input{
+		Message: "Name of CLI command",
+		Default: "start",
 	}
 }
 
