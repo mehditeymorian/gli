@@ -9,7 +9,7 @@ type Module struct {
 	// DownloadURL location of module in the template to download from
 	DownloadURL string
 
-	// SavePath path that files are stored
+	// SavePath path that files are stored if ModuleFile#SeparateSavePath is false.
 	SavePath []string
 
 	// Package module package to download
