@@ -79,8 +79,6 @@ func (b *Builder) DownloadModule(module model.Module) DownloadStatus {
 	moduleName := "Module " + module.Name
 	b.Logger.StartSpinner("\tDownloading " + moduleName)
 
-	savePath := module.GetSavePath(b.ParentDirectory)
-
 	downloaded := 0
 
 	for _, file := range files {
@@ -94,6 +92,8 @@ func (b *Builder) DownloadModule(module model.Module) DownloadStatus {
 
 			continue
 		}
+
+		savePath := module.GetSavePath(b.ParentDirectory, file)
 
 		err = b.SaveFile(reader, savePath, file)
 		if err != nil {

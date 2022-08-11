@@ -18,13 +18,16 @@ type Module struct {
 	Files []ModuleFile
 }
 
-func (m Module) GetSavePath(parentDirectory string) string {
-	join := make([]string, len(m.SavePath)+1)
+func (m Module) GetSavePath(parentDirectory string, file ModuleFile) string {
+	join := []string{parentDirectory}
 
-	join[0] = parentDirectory
+	savePath := m.SavePath
+	if file.SeparateSavePath {
+		savePath = file.SavePath
+	}
 
-	for i, each := range m.SavePath {
-		join[i+1] = each
+	for _, each := range savePath {
+		join = append(join, each)
 	}
 
 	return path.Join(join...)
