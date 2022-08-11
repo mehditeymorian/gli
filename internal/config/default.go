@@ -19,33 +19,41 @@ func Default() Config {
 			model.Dockerfile: DockerfileModule(),
 		},
 		RequiredModules: []model.Module{
+			configModule(),
+			modModule(),
+		},
+	}
+}
+
+func modModule() model.Module {
+	return model.Module{
+		Name:        "Others",
+		DownloadURL: "template/",
+		SavePath:    nil,
+		Package:     nil,
+		Files: []model.ModuleFile{
 			{
-				Name:        "config",
-				DownloadURL: "template/config/",
-				SavePath:    []string{"internal", "config"},
-				Package:     []string{"github.com/knadh/koanf@latest", "github.com/tidwall/pretty@latest"},
-				Files: []model.ModuleFile{
-					{
-						Name:           "config.go",
-						RequireParsing: true,
-					},
-					{
-						Name:           "default.go",
-						RequireParsing: true,
-					},
-				},
+				Name:           "go.mod",
+				RequireParsing: true,
+			},
+		},
+	}
+}
+
+func configModule() model.Module {
+	return model.Module{
+		Name:        "config",
+		DownloadURL: "template/config/",
+		SavePath:    []string{"internal", "config"},
+		Package:     []string{"github.com/knadh/koanf@latest", "github.com/tidwall/pretty@latest"},
+		Files: []model.ModuleFile{
+			{
+				Name:           "config.go",
+				RequireParsing: true,
 			},
 			{
-				Name:        "Others",
-				DownloadURL: "template/",
-				SavePath:    nil,
-				Package:     nil,
-				Files: []model.ModuleFile{
-					{
-						Name:           "go.mod",
-						RequireParsing: true,
-					},
-				},
+				Name:           "default.go",
+				RequireParsing: true,
 			},
 		},
 	}
