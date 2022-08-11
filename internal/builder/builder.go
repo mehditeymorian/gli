@@ -8,6 +8,8 @@ import (
 	"github.com/mehditeymorian/gli/internal/logger"
 	"github.com/mehditeymorian/gli/internal/model"
 	"golang.org/x/oauth2"
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 	"html/template"
 	"io"
 	"os"
@@ -149,6 +151,9 @@ func (b *Builder) SaveFile(reader io.ReadCloser, savePath string, moduleFile mod
 
 		funcMap := template.FuncMap{
 			"toUpper": strings.ToUpper,
+			"capitalize": func(in string) string {
+				return cases.Title(language.English).String(in)
+			},
 		}
 
 		temp := template.Must(template.New(moduleFile.Name).Funcs(funcMap).Parse(buf.String()))
