@@ -17,6 +17,7 @@ func Default() Config {
 			model.HTTP:       HTTPModules(),
 			model.Logger:     LoggerModules(),
 			model.Dockerfile: DockerfileModule(),
+			model.StartPoint: StartPointModules(),
 		},
 		RequiredModules: []model.Module{
 			configModule(),
@@ -63,6 +64,54 @@ func configModule() model.Module {
 // endregion
 
 // region Selectable modules
+
+func StartPointModules() model.ModuleGroup {
+	modules := []model.Module{
+		{
+			Name:        model.StartPointCli,
+			DownloadURL: "template/cli/",
+			SavePath:    nil,
+			Package:     []string{"github.com/spf13/cobra@latest"},
+			Files: []model.ModuleFile{
+				{
+					Name:             "main.go",
+					SeparateSavePath: true,
+					SavePath:         nil,
+					RequireParsing:   false,
+				},
+				{
+					Name:             "root.go",
+					RequireParsing:   false,
+					SeparateSavePath: true,
+					SavePath:         []string{"cmd"},
+				},
+				{
+					Name:             "command.go",
+					RequireParsing:   true,
+					SeparateSavePath: true,
+					SavePath:         []string{"internal", "cmd"},
+				},
+			},
+		},
+		{
+			Name:        model.StartPointSimple,
+			DownloadURL: "template/",
+			SavePath:    nil,
+			Package:     nil,
+			Files: []model.ModuleFile{
+				{
+					Name:           "main.go",
+					RequireParsing: true,
+				},
+			},
+		},
+	}
+
+	return model.ModuleGroup{
+		Selectable: false,
+		Modules:    modules,
+	}
+}
 
 func DockerfileModule() model.ModuleGroup {
 	modules := []model.Module{
