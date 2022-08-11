@@ -12,7 +12,7 @@ func Default() Config {
 			"1.16",
 			"1.15",
 		},
-		Modules: map[string]model.ModuleGroup{
+		SelectableModules: map[string]model.ModuleGroup{
 			model.DB:         DBModules(),
 			model.HTTP:       HTTPModules(),
 			model.Logger:     LoggerModules(),

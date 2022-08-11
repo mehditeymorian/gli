@@ -5,14 +5,14 @@ import (
 )
 
 type Config struct {
-	Versions        []string
-	Modules         map[string]model.ModuleGroup
-	RequiredModules []model.Module
+	Versions          []string
+	SelectableModules map[string]model.ModuleGroup
+	RequiredModules   []model.Module
 }
 
 func (c Config) ModuleNames() []string {
 	modules := make([]string, 0)
-	for module, val := range c.Modules {
+	for module, val := range c.SelectableModules {
 
 		if !val.Selectable {
 			continue
@@ -27,7 +27,7 @@ func (c Config) ModuleNames() []string {
 func (c Config) ModuleOptions(name string) []string {
 	names := make([]string, 0)
 
-	for _, module := range c.Modules[name].Modules {
+	for _, module := range c.SelectableModules[name].Modules {
 		names = append(names, module.Name)
 	}
 
@@ -67,7 +67,7 @@ func (c Config) GetRequiredModules(app *model.SurveyResult) []model.Module {
 }
 
 func (c Config) SearchModule(module, technology string) *model.Module {
-	for _, m := range c.Modules[module].Modules {
+	for _, m := range c.SelectableModules[module].Modules {
 		if m.Name == technology {
 			return &m
 		}
