@@ -31,6 +31,7 @@ func (a *SurveyResult) Params() map[string]any {
 	return map[string]any{
 		"Name":      a.Name,
 		"ShortName": a.ShortName,
+		"CliName":   a.CliName,
 		"Version":   a.Version,
 		"HasLogger": a.Logger != None,
 		"HasDB":     a.DB != None,
@@ -54,7 +55,6 @@ func (a *SurveyResult) Execute() *App {
 	return &App{
 		Name:            a.Name,
 		ShortName:       a.ShortName,
-		CliName:         a.CliName,
 		Params:          a.Params(),
 		Flags:           make(map[Flag]bool),
 		SelectedModules: nil,
