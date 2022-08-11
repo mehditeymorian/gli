@@ -12,7 +12,7 @@ func Default() Config {
 			"1.16",
 			"1.15",
 		},
-		Modules: map[string][]model.Module{
+		Modules: map[string]model.ModuleGroup{
 			model.DB:         DBModules(),
 			model.HTTP:       HTTPModules(),
 			model.Logger:     LoggerModules(),
@@ -59,8 +59,8 @@ func configModule() model.Module {
 	}
 }
 
-func DockerfileModule() []model.Module {
-	return []model.Module{
+func DockerfileModule() model.ModuleGroup {
+	modules := []model.Module{
 		{
 			Name:        "Dockerfile",
 			DownloadURL: "template/",
@@ -74,10 +74,14 @@ func DockerfileModule() []model.Module {
 			},
 		},
 	}
+	return model.ModuleGroup{
+		Selectable: false,
+		Modules:    modules,
+	}
 }
 
-func LoggerModules() []model.Module {
-	return []model.Module{
+func LoggerModules() model.ModuleGroup {
+	modules := []model.Module{
 		{
 			Name:  model.None,
 			Files: nil,
@@ -99,10 +103,14 @@ func LoggerModules() []model.Module {
 			},
 		},
 	}
+	return model.ModuleGroup{
+		Selectable: true,
+		Modules:    modules,
+	}
 }
 
-func HTTPModules() []model.Module {
-	return []model.Module{
+func HTTPModules() model.ModuleGroup {
+	modules := []model.Module{
 		{
 			Name:  model.None,
 			Files: nil,
@@ -120,10 +128,14 @@ func HTTPModules() []model.Module {
 			Files: nil,
 		},
 	}
+	return model.ModuleGroup{
+		Selectable: true,
+		Modules:    modules,
+	}
 }
 
-func DBModules() []model.Module {
-	return []model.Module{
+func DBModules() model.ModuleGroup {
+	modules := []model.Module{
 		{
 			Name:  model.None,
 			Files: nil,
@@ -156,5 +168,10 @@ func DBModules() []model.Module {
 				},
 			},
 		},
+	}
+
+	return model.ModuleGroup{
+		Selectable: true,
+		Modules:    modules,
 	}
 }

@@ -6,15 +6,15 @@ import (
 
 type Config struct {
 	Versions        []string
-	Modules         map[string][]model.Module
+	Modules         map[string]model.ModuleGroup
 	RequiredModules []model.Module
 }
 
 func (c Config) ModuleNames() []string {
 	modules := make([]string, 0)
 	for module, val := range c.Modules {
-		// modules with 1 option are yes or no type of questions, and they are mandatory to ask from user.
-		if len(val) < 2 {
+
+		if !val.Selectable {
 			continue
 		}
 
@@ -27,7 +27,7 @@ func (c Config) ModuleNames() []string {
 func (c Config) ModuleOptions(name string) []string {
 	names := make([]string, 0)
 
-	for _, module := range c.Modules[name] {
+	for _, module := range c.Modules[name].Modules {
 		names = append(names, module.Name)
 	}
 
@@ -67,7 +67,7 @@ func (c Config) GetRequiredModules(app *model.SurveyResult) []model.Module {
 }
 
 func (c Config) SearchModule(module, technology string) *model.Module {
-	for _, m := range c.Modules[module] {
+	for _, m := range c.Modules[module].Modules {
 		if m.Name == technology {
 			return &m
 		}
