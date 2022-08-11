@@ -13,7 +13,7 @@ func Execute() {
 		Long: ``,
 	}
 
-	root.AddCommands(
+	root.AddCommand(
 		cmd.{{ capitalize .CliName }}(),
 		)
 

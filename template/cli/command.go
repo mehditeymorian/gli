@@ -10,6 +10,8 @@ func {{ capitalize .CliName }}() *cobra.Command {
 		Long: ``,
 		Run: main,
 	}
+
+	return command
 }
 
 func main(cmd *cobra.Command, args []string)  {
