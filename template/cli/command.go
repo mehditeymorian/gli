@@ -19,6 +19,6 @@ func {{ capitalize .CliName }}() *cobra.Command {
 }
 
 func main(cmd *cobra.Command, args []string)  {
-	cfg := config.Load()
+	cfg := config.Load("config.yaml")
 	{{if .HasLogger}}log := logger.New(cfg.Logger){{end}}
 }
