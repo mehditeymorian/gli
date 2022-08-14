@@ -1,6 +1,10 @@
 package cmd
 
-import "github.com/spf13/cobra"
+import (
+	"github.com/spf13/cobra"
+	"{{ .Name }}/internal/config"
+	"{{ .Name }}/internal/logger"
+)
 
 func {{ capitalize .CliName }}() *cobra.Command {
 
@@ -15,5 +19,6 @@ func {{ capitalize .CliName }}() *cobra.Command {
 }
 
 func main(cmd *cobra.Command, args []string)  {
-
+	cfg := config.Load()
+	{{if .HasLogger}}log := logger.New(cfg.Logger){{end}}
 }
