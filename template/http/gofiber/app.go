@@ -1,6 +1,7 @@
 package app
 
 import (
+	"github.com/gofiber/fiber/v2"
 	"{{ .Name }}/internal/http"
 )
 
