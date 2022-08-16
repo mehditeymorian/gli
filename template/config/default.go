@@ -13,5 +13,9 @@ func Default() Config {
 		{{if .HasLogger}}Logger: logger.Config{
 			Level: "warn",
 	},{{end}}
+		{{if .HasDB}}DB: db.Config{
+			URI: "mongodb:localhost:27017",
+			Name: "{{.ShortName }}",
+	},{{end}}
 	}
 }
