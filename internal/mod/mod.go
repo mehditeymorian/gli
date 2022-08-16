@@ -35,7 +35,10 @@ func DownloadModules(app *model.App, logger logger.Logger) (int, int) {
 
 	}
 
-	GoModTidy(app.ShortName, logger)
+	logger.StartSpinner("Doing the Last Touch🫡")
+	RunGoCommand([]string{"mod", "tidy"}, app.ShortName, logger)
+	RunGoCommand([]string{"fmt"}, app.ShortName, logger)
+	logger.StopSpinner("voilà, Done 🤌🏻")
 
 	return totalDownloaded, total
 }
@@ -53,8 +56,8 @@ func downloadModule(module, projectDirectory string, logger logger.Logger) error
 	return nil
 }
 
-func GoModTidy(projectDirectory string, logger logger.Logger) {
-	cmd := exec.Command("go", "mod", "tidy")
+func RunGoCommand(input []string, projectDirectory string, logger logger.Logger) {
+	cmd := exec.Command("go", input...)
 	cmd.Dir = projectDirectory + "/"
 
 	err := cmd.Run()
