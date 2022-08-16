@@ -170,8 +170,22 @@ func HTTPModules() model.ModuleGroup {
 			Files: nil,
 		},
 		{
-			Name:  "gofiber",
-			Files: nil,
+			Name:        "gofiber",
+			DownloadURL: "template/http/gofiber/",
+			SavePath:    []string{"internal", "http"},
+			Package:     []string{"github.com/gofiber/fiber/v2"},
+			Files: []model.ModuleFile{
+				{
+					Name:           "config.go",
+					RequireParsing: false,
+				},
+				{
+					Name:             "app.go",
+					RequireParsing:   true,
+					SeparateSavePath: true,
+					SavePath:         []string{"internal", "http", "app"},
+				},
+			},
 		},
 		{
 			Name:  "echo",
