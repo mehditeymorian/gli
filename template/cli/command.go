@@ -3,7 +3,7 @@ package cmd
 import (
 	"github.com/spf13/cobra"
 	"{{ .Name }}/internal/config"
-	"{{ .Name }}/internal/logger"
+	{{if .HasLogger}}"{{ .Name }}/internal/logger"{{end}}
 )
 
 func {{ capitalize .CliName }}() *cobra.Command {

@@ -2,7 +2,7 @@ package main
 
 import (
 	"{{ .Name }}/internal/config"
-	"{{ .Name }}/internal/logger"
+	{{if .HasLogger}}"{{ .Name }}/internal/logger"{{end}}
 )
 
 func main() {
