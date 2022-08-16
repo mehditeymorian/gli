@@ -7,7 +7,7 @@ import (
 func Default() Config {
 	return Config{
 		{{if .HasHTTP}}HTTP: http.Config{
-			Port: "8080"
+			Port: "8080",
 	},{{end}}
 	}
 }
