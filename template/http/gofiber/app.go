@@ -6,7 +6,7 @@ import (
 )
 
 type App struct {
-	App  fiber.App
+	App  *fiber.App
 	Port string
 }
 
