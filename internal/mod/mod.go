@@ -35,6 +35,8 @@ func DownloadModules(app *model.App, logger logger.Logger) (int, int) {
 
 	}
 
+	GoModTidy(app.ShortName, logger)
+
 	return totalDownloaded, total
 }
 
@@ -49,4 +51,14 @@ func downloadModule(module, projectDirectory string, logger logger.Logger) error
 
 	logger.PrintfV("%s\n", output)
 	return nil
+}
+
+func GoModTidy(projectDirectory string, logger logger.Logger) {
+	cmd := exec.Command("go", "mod", "tidy")
+	cmd.Dir = projectDirectory + "/"
+
+	err := cmd.Run()
+	if err != nil {
+		logger.PrintfV("failed to go mod tidy")
+	}
 }
