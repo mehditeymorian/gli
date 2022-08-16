@@ -3,6 +3,7 @@ package config
 import (
 	{{if .HasHTTP}}"{{.Name}}/internal/http"{{end}}
 	{{if .HasLogger}}"{{.Name}}/internal/logger"{{end}}
+	{{if .HasDB}}"{{.Name}}/internal/db"{{end}}
 )
 
 func Default() Config {
