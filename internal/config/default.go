@@ -187,14 +187,6 @@ func HTTPModules() model.ModuleGroup {
 				},
 			},
 		},
-		{
-			Name:  "echo",
-			Files: nil,
-		},
-		{
-			Name:  "gin",
-			Files: nil,
-		},
 	}
 	return model.ModuleGroup{
 		Selectable: true,
@@ -206,14 +198,6 @@ func DBModules() model.ModuleGroup {
 	modules := []model.Module{
 		{
 			Name:  model.None,
-			Files: nil,
-		},
-		{
-			Name:  "mysql",
-			Files: nil,
-		},
-		{
-			Name:  "postgres",
 			Files: nil,
 		},
 		{
