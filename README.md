@@ -60,3 +60,6 @@ voilà, Done 🤌🏻
 
 app is Ready! 😎🙌
 ```
+
+# License
+Unless otherwise noted, the GLI source files are distributed under the Apache Version 2.0 license found in the LICENSE file.
