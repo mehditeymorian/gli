@@ -61,5 +61,8 @@ voilà, Done 🤌🏻
 app is Ready! 😎🙌
 ```
 
+# Contact
+- [Email](mailto:mehditeymorian322@gmail.com)
+
 # License
 Unless otherwise noted, the GLI source files are distributed under the Apache Version 2.0 license found in the LICENSE file.
