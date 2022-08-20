@@ -36,6 +36,9 @@ func (a *SurveyResult) Params() map[string]any {
 		"HasLogger": a.Logger != None,
 		"HasDB":     a.DB != None,
 		"HasHTTP":   a.HTTP != None,
+		"DB":        a.DB,
+		"HTTP":      a.HTTP,
+		"Logger":    a.Logger,
 	}
 }
 
