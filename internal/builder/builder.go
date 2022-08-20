@@ -7,7 +7,6 @@ import (
 	"github.com/mehditeymorian/gli/internal/config"
 	"github.com/mehditeymorian/gli/internal/logger"
 	"github.com/mehditeymorian/gli/internal/model"
-	"golang.org/x/oauth2"
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
 	"html/template"
@@ -18,9 +17,8 @@ import (
 )
 
 const (
-	user  = "mehditeymorian"
-	repo  = "gli"
-	token = "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"
+	user = "mehditeymorian"
+	repo = "gli"
 )
 
 type DownloadStatus int
@@ -40,10 +38,7 @@ type Builder struct {
 }
 
 func NewBuilder(cfg config.Config, logger logger.Logger) *Builder {
-	ctx := context.Background()
-	ts := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: token})
-	tc := oauth2.NewClient(ctx, ts)
-	client := github.NewClient(tc)
+	client := github.NewClient(nil)
 
 	return &Builder{
 		Client: client,
