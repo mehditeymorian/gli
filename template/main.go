@@ -1,6 +1,8 @@
 package main
 
 import (
+	"log"
+
 	"{{ .Name }}/internal/config"
 	{{if .HasLogger}}"{{ .Name }}/internal/logger"{{end}}
 	{{if .HasHTTP}}"{{ .Name }}/internal/http/app"{{end}}
@@ -10,7 +12,7 @@ import (
 func main() {
 	cfg := config.Load("config.yaml")
 
-	{{if .HasLogger}}log := logger.New(cfg.Logger){{end}}
+	{{if .HasLogger}}logger := logger.New(cfg.Logger){{end}}
 
 	{{if .HasDB}}
 	{{if eq .DB "mongo"}} database, err := db.Connect(cfg.DB){{end}}
