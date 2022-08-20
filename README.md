@@ -61,6 +61,10 @@ voilà, Done 🤌🏻
 app is Ready! 😎🙌
 ```
 
+# TODO
+- [ ] add more db, logger, http templates
+- [ ] add package explorer to find packages easier
+
 # Contact
 - [Email](mailto:mehditeymorian322@gmail.com)
 
